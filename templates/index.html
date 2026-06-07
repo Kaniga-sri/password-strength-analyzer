@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Password Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Password Strength Analyzer</h1>
+
+    <form method="POST">
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter Password">
+
+        <button type="submit">
+            Check Password
+        </button>
+    </form>
+
+    {% if result %}
+
+{% if result.strength == "Strong Password" %}
+<h2 class="strong">{{ result.strength }}</h2>
+{% elif result.strength == "Medium Password" %}
+<h2 class="medium">{{ result.strength }}</h2>
+{% else %}
+<h2 class="weak">{{ result.strength }}</h2>
+{% endif %}
+
+<div class="progress">
+    <div class="progress-bar"
+         style="width: {{ result.score * 20 }}%;">
+    </div>
+</div>
+
+<p>Score: {{ result.score }}/5</p>
+
+{% if result.reused %}
+<p>⚠️ This password was used before.</p>
+{% else %}
+<p>✅ New password.</p>
+{% endif %}
+
+{% if result.suggestions %}
+<h3>Suggestions</h3>
+
+<ul>
+    {% for item in result.suggestions %}
+        <li>{{ item }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h3>Generated Strong Password</h3>
+
+<div class="generated-password">
+    {{ result.generated_password }}
+</div>
+
+{% endif %}
+ </div>   
+
+</body>
+</html>
